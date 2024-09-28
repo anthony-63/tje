@@ -15,6 +15,10 @@ fn main() {
 		exit(1)
 	}
 
+	defer {
+		file.close()
+	}
+
 	mut reader := io.new_buffered_reader(io.BufferedReaderConfig{ reader: file })
 
 	mut loader := classfile.ClassLoader {r: reader}
@@ -31,7 +35,6 @@ fn main() {
 	println("magic: 0x" + magic.hex())
 	println("classfile version: " + major.str() + "." + minor.str())
 
-	defer {
-		file.close()
-	}
+	const_pool := loader.load_const_pool()
+	const_pool.print()
 }
